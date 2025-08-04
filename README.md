@@ -7,3 +7,6 @@ Personal configuration for terminal tools
 3. Install [Ghostty](https://ghostty.org/): `brew install --cask ghostty`
 4. Install [NeoVim](https://neovim.io/): `brew install neovim`
 5. Clone this repo: `git clone git@github.com:jgaribaldi/terminal-configuration.git .config/`
+
+## Configuration
+1. Set up git's global editor: `git config --global core.editor nvim`
