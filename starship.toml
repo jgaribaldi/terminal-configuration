@@ -83,7 +83,7 @@ format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
 [python]
 symbol = " "
 style = "bg:#212736"
-format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+format = ' via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
 
 [time]
 disabled = false
