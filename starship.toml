@@ -63,7 +63,7 @@ deleted = '🗑'
 [nodejs]
 symbol = ""
 style = "bg:#212736"
-format = 'via [$symbol($version )]($style)'
+format = ' via [$symbol($version )]($style)'
 
 [rust]
 symbol = ""
