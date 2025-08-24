@@ -134,7 +134,7 @@ return {
       },
     }
 
-    require('dap-python').setup 'python3'
+    require('dap-python').setup '~/.local/pipx/venvs/debugpy/bin/python'
     -- If using the above, then `/path/to/venv/bin/python -m debugpy --version`
     -- must work in the shell
   end,
