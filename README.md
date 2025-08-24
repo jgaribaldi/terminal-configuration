@@ -10,3 +10,4 @@ Personal configuration for terminal tools
 
 ## Configuration
 1. Set up git's global editor: `git config --global core.editor nvim`
+2. Install Python debugger: `brew install pipx` `pipx install debugpy` `pipx ensurepath`
