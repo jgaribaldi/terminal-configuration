@@ -4,8 +4,9 @@ brew install font-hack-nerd-font
 brew install starship
 brew install --cask ghostty
 brew install neovim
-git config --global core.editor nvim
 brew install pipx
+brew install markdownlint-cli2
 pipx install debugpy
 pipx ensurepath
-brew install markdownlint-cli2
+git clone git@github.com:jgaribaldi/terminal-configuration.git .config/
+git config --global core.editor nvim
