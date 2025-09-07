@@ -56,6 +56,13 @@ return {
       end,
       desc = 'Debug: Set Breakpoint',
     },
+    {
+      '<leader>dS',
+      function()
+        require('dap').stop()
+      end,
+      desc = 'Debug: Stop debug session',
+    },
     -- Toggle to see last session result. Without this, you can't see session output in case of unhandled exception.
     {
       '<leader>dui',
