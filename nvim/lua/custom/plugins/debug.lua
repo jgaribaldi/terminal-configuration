@@ -144,5 +144,32 @@ return {
     require('dap-python').setup '~/.local/pipx/venvs/debugpy/bin/python'
     -- If using the above, then `/path/to/venv/bin/python -m debugpy --version`
     -- must work in the shell
+    -- Set custom colors for DAP breakpoints that complements Tokyo Night
+    vim.api.nvim_set_hl(0, 'DapBreakpoint', { fg = '#f7768e', bold = true })
+    vim.api.nvim_set_hl(0, 'DapBreakpointCondition', { fg = '#e0af68', bold = true })
+    vim.api.nvim_set_hl(0, 'DapStopped', { fg = '#9ece6a', bold = true })
+    vim.api.nvim_set_hl(0, 'DapBreakpointLine', { bg = '#3d2a2a' })
+
+    -- Configure the signs
+    vim.fn.sign_define('DapBreakpoint', {
+      text = '●',
+      texthl = 'DapBreakpoint',
+      linehl = 'DapBreakpointLine',
+      numhl = 'DapBreakpoint',
+    })
+
+    vim.fn.sign_define('DapBreakpointCondition', {
+      text = '◐',
+      texthl = 'DapBreakpointCondition',
+      linehl = 'DapBreakpointLine',
+      numhl = 'DapBreakpointCondition',
+    })
+
+    vim.fn.sign_define('DapStopped', {
+      text = '▶',
+      texthl = 'DapStopped',
+      linehl = 'DapStopped',
+      numhl = 'DapStopped',
+    })
   end,
 }
