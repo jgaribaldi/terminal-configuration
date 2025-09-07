@@ -59,9 +59,9 @@ return {
     {
       '<leader>dS',
       function()
-        require('dap').stop()
+        require('dap').close()
       end,
-      desc = 'Debug: Stop debug session',
+      desc = 'Debug: Close debug session',
     },
     -- Toggle to see last session result. Without this, you can't see session output in case of unhandled exception.
     {
