@@ -60,6 +60,7 @@ return {
       '<leader>dS',
       function()
         require('dap').close()
+        require('dapui').close()
       end,
       desc = 'Debug: Close debug session',
     },
