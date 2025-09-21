@@ -241,6 +241,7 @@ return {
       'stylua', -- Used to format Lua code
       'isort', -- Used to format Python code
       'black', -- Used to format Python code
+      'gopls', -- Used to format Go code
     })
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
