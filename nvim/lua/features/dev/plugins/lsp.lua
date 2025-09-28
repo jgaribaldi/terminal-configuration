@@ -89,32 +89,48 @@ local function on_lsp_attach()
   })
 end
 
-local function setup_servers()
-  local servers = {
-    gopls = {},
-    pyright = {},
-    lua_ls = {
-      settings = {
-        Lua = {
-          completion = {
-            callSnippet = 'Replace',
-          },
-        },
-      },
-    },
-  }
+local function setup_servers(opts)
+  local servers = opts.servers or {}
+  local capabilities = opts.capabilities or require('blink.cmp').get_lsp_capabilities()
 
-  local capabilities = require('blink.cmp').get_lsp_capabilities()
+  local data_root = vim.fn.stdpath('data')
+  if vim.fn.isdirectory(data_root) == 0 or not vim.loop.fs_access(data_root, 'W') then
+    return
+  end
 
-  require('mason').setup()
+  local ok_mason, mason = pcall(require, 'mason')
+  if not ok_mason then
+    return
+  end
+
+  local ok_setup = pcall(mason.setup, opts.mason or {})
+  if not ok_setup then
+    return
+  end
+
   local ensure_installed = vim.tbl_keys(servers)
-  vim.list_extend(ensure_installed, {
-    'stylua',
-  })
+  vim.list_extend(ensure_installed, opts.ensure_installed or {})
 
-  require('mason-tool-installer').setup { ensure_installed = ensure_installed }
+  local unique = {}
+  local seen = {}
+  for _, item in ipairs(ensure_installed) do
+    if not seen[item] then
+      table.insert(unique, item)
+      seen[item] = true
+    end
+  end
 
-  require('mason-lspconfig').setup {
+  local ok_mti, mason_tool_installer = pcall(require, 'mason-tool-installer')
+  if ok_mti then
+    pcall(mason_tool_installer.setup, { ensure_installed = unique })
+  end
+
+  local ok_mlsp, mason_lspconfig = pcall(require, 'mason-lspconfig')
+  if not ok_mlsp then
+    return
+  end
+
+  mason_lspconfig.setup {
     handlers = {
       function(server_name)
         local server = servers[server_name] or {}
@@ -134,9 +150,13 @@ return {
     { 'j-hui/fidget.nvim', opts = {} },
     'saghen/blink.cmp',
   },
-  config = function()
+  opts = {
+    servers = {},
+    ensure_installed = {},
+  },
+  config = function(_, opts)
     on_lsp_attach()
     setup_diagnostics()
-    setup_servers()
+    setup_servers(opts)
   end,
 }

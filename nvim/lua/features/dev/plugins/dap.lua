@@ -51,19 +51,40 @@ local function setup_keymaps()
   end, 'Debug: Toggle UI')
 end
 
-local function setup_mason()
-  require('mason-nvim-dap').setup {
+local function setup_mason(ensure)
+  local unique = {}
+  local seen = {}
+  for _, item in ipairs(ensure or {}) do
+    if not seen[item] then
+      table.insert(unique, item)
+      seen[item] = true
+    end
+  end
+
+  local data_root = vim.fn.stdpath('data')
+  if vim.fn.isdirectory(data_root) == 0 or not vim.loop.fs_access(data_root, 'W') then
+    return
+  end
+
+  local ok, mason_dap = pcall(require, 'mason-nvim-dap')
+  if not ok then
+    return
+  end
+
+  pcall(mason_dap.setup, {
     automatic_installation = true,
     handlers = {},
-    ensure_installed = {
-      'delve',
-      'debugpy',
-    },
-  }
+    ensure_installed = unique,
+  })
 end
 
 local function setup_dap_ui()
-  require('dapui').setup {
+  local ok, dapui = pcall(require, 'dapui')
+  if not ok then
+    return
+  end
+
+  dapui.setup {
     icons = { expanded = '▾', collapsed = '▸', current_frame = '*' },
     controls = {
       icons = {
@@ -89,8 +110,15 @@ local function setup_highlights()
 end
 
 local function setup_listeners()
-  local dap = require 'dap'
-  local dapui = require 'dapui'
+  local ok_dap, dap = pcall(require, 'dap')
+  if not ok_dap then
+    return
+  end
+
+  local ok_ui, dapui = pcall(require, 'dapui')
+  if not ok_ui then
+    return
+  end
 
   dap.listeners.after.event_initialized['dapui_config'] = dapui.open
   dap.listeners.before.event_terminated['dapui_config'] = dapui.close
@@ -104,23 +132,21 @@ return {
     'nvim-neotest/nvim-nio',
     'mason-org/mason.nvim',
     'jay-babu/mason-nvim-dap.nvim',
-    'leoluz/nvim-dap-go',
-    'mfussenegger/nvim-dap-python',
   },
-  config = function()
+  opts = {
+    ensure_installed = {},
+    setup = {},
+  },
+  config = function(_, opts)
     setup_keymaps()
-    setup_mason()
+    setup_mason(opts.ensure_installed)
     setup_dap_ui()
     setup_listeners()
-
-    require('dap-go').setup {
-      delve = {
-        detached = vim.fn.has 'win32' == 0,
-      },
-    }
-
-    require('dap-python').setup '~/.local/pipx/venvs/debugpy/bin/python'
     setup_highlights()
     setup_signs()
+
+    for _, configure in ipairs(opts.setup or {}) do
+      pcall(configure)
+    end
   end,
 }

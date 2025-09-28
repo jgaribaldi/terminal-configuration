@@ -1,9 +1,12 @@
+local data_root = vim.fn.stdpath('data')
+local data_writable = vim.fn.isdirectory(data_root) == 1 and vim.loop.fs_access(data_root, 'W')
+
 return {
   'nvim-treesitter/nvim-treesitter',
-  build = ':TSUpdate',
+  build = data_writable and ':TSUpdate' or nil,
   main = 'nvim-treesitter.configs',
   opts = {
-    ensure_installed = {
+    ensure_installed = data_writable and {
       'bash',
       'c',
       'diff',
@@ -18,37 +21,14 @@ return {
       'python',
       'go',
       'rust',
-    },
-    auto_install = true,
+      'rust',
+    } or {},
+    auto_install = data_writable,
     highlight = {
       enable = true,
       additional_vim_regex_highlighting = { 'ruby' },
     },
     indent = { enable = true, disable = { 'ruby' } },
   },
-  dependencies = {
-    {
-      'ray-x/go.nvim',
-      dependencies = {
-        'ray-x/guihua.lua',
-        'neovim/nvim-lspconfig',
-        'nvim-treesitter/nvim-treesitter',
-      },
-      opts = {},
-      config = function(_, opts)
-        require('go').setup(opts)
-        local format_sync_grp = vim.api.nvim_create_augroup('GoFormat', {})
-        vim.api.nvim_create_autocmd('BufWritePre', {
-          pattern = '*.go',
-          callback = function()
-            require('go.format').goimports()
-          end,
-          group = format_sync_grp,
-        })
-      end,
-      event = { 'CmdlineEnter' },
-      ft = { 'go', 'gomod' },
-      build = ':lua require("go.install").update_all_sync()',
-    },
-  },
+  dependencies = {},
 }

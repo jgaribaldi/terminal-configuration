@@ -84,6 +84,28 @@ I hope you enjoy your Neovim journey,
 P.S. You can delete this when you're done too. It's your config now! :)
 --]]
 
+do
+  local config_root = vim.fn.expand('~/.config')
+  local function ensure_dir(path)
+    if vim.fn.isdirectory(path) == 0 then
+      vim.fn.mkdir(path, 'p')
+    end
+  end
+
+  local cache_home = config_root .. '/.nvim-cache'
+  local state_home = config_root .. '/.nvim-state'
+
+  if not vim.env.XDG_CACHE_HOME then
+    vim.env.XDG_CACHE_HOME = cache_home
+    ensure_dir(cache_home)
+  end
+
+  if not vim.env.XDG_STATE_HOME then
+    vim.env.XDG_STATE_HOME = state_home
+    ensure_dir(state_home)
+  end
+end
+
 -- Load the upcoming tiered configuration scaffold.
 pcall(require, 'features.core.settings')
 pcall(require, 'features.core.keymaps')
@@ -176,6 +198,7 @@ require('lazy').setup({
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   { import = 'features.core.plugins' },
   { import = 'features.dev' },
+  { import = 'features.lang' },
   { import = 'custom.plugins' },
   --
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
@@ -223,4 +246,3 @@ require('ufo').setup {
   end,
 }
 --
-
