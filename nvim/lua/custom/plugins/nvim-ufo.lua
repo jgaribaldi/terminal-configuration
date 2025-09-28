@@ -1,6 +1,1 @@
-return {
-  'kevinhwang91/nvim-ufo',
-  dependencies = {
-    { 'kevinhwang91/promise-async' },
-  },
-}
+return require('features.core.plugins.folds')
