@@ -85,24 +85,28 @@ P.S. You can delete this when you're done too. It's your config now! :)
 --]]
 
 do
-  local config_root = vim.fn.expand('~/.config')
-  local function ensure_dir(path)
-    if vim.fn.isdirectory(path) == 0 then
-      vim.fn.mkdir(path, 'p')
+  local tmp = vim.loop.os_tmpdir() or '/tmp'
+
+  local function ensure_env(var, suffix)
+    if vim.env[var] then
+      return vim.env[var]
     end
+    local path = string.format('%s/nvim-%s/%d', tmp, suffix, vim.fn.getpid())
+    vim.fn.mkdir(path, 'p')
+    vim.env[var] = path
+    return path
   end
 
-  local cache_home = config_root .. '/.nvim-cache'
-  local state_home = config_root .. '/.nvim-state'
+  ensure_env('XDG_CACHE_HOME', 'cache')
+  local state_home = ensure_env('XDG_STATE_HOME', 'state')
 
-  if not vim.env.XDG_CACHE_HOME then
-    vim.env.XDG_CACHE_HOME = cache_home
-    ensure_dir(cache_home)
+  if not vim.env.NVIM_LOG_FILE then
+    vim.env.NVIM_LOG_FILE = string.format('%s/nvim.log', state_home)
   end
 
-  if not vim.env.XDG_STATE_HOME then
-    vim.env.XDG_STATE_HOME = state_home
-    ensure_dir(state_home)
+  local repo_log = string.format('%s/.nvimlog', vim.loop.cwd())
+  if vim.loop.fs_stat(repo_log) then
+    vim.loop.fs_unlink(repo_log)
   end
 end
 
