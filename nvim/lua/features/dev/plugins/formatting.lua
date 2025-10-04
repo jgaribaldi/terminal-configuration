@@ -1,10 +1,17 @@
 local function format_on_save(bufnr)
+  local filetype = vim.bo[bufnr].filetype
   local disable_filetypes = { c = true, cpp = true }
-  if disable_filetypes[vim.bo[bufnr].filetype] then
+  if disable_filetypes[filetype] then
     return nil
   end
+
+  local timeout = 500
+  if filetype == 'go' then
+    timeout = 2000
+  end
+
   return {
-    timeout_ms = 500,
+    timeout_ms = timeout,
     lsp_format = 'fallback',
   }
 end
