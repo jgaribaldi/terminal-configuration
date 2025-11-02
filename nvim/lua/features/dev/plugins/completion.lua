@@ -19,6 +19,8 @@ return {
   opts = {
     keymap = {
       preset = 'default',
+      ['<C-y>'] = false,
+      ['<Tab>'] = { 'select_and_accept', 'fallback' },
     },
     appearance = {
       nerd_font_variant = 'mono',
