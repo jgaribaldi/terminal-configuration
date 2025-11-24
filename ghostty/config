@@ -48,8 +48,3 @@ font-family = "RobotoMono Nerd Font Mono"
 font-size = 16
 keybind = shift+enter=text:\n
 
-keybind = unconsumed:ctrl+h=goto_split:left
-keybind = unconsumed:ctrl+j=goto_split:bottom
-keybind = unconsumed:ctrl+k=goto_split:top
-keybind = unconsumed:ctrl+l=goto_split:right
-
