@@ -9,7 +9,7 @@
       "complex_modifications": {
         "rules": [
           {
-            "description": "Swap non_us_backslash (< >) with grave_accent_and_tilde (| °), preserving Right Shift behavior",
+            "description": "Swap non_us_backslash (< >) with grave_accent_and_tilde (| °) only for built-in MacBook keyboard",
             "manipulators": [
               {
                 "type": "basic",
@@ -19,6 +19,16 @@
                 "to": [
                   {
                     "key_code": "grave_accent_and_tilde"
+                  }
+                ],
+                "conditions": [
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ]
               },
@@ -30,6 +40,16 @@
                 "to": [
                   {
                     "key_code": "non_us_backslash"
+                  }
+                ],
+                "conditions": [
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ]
               },
@@ -50,6 +70,16 @@
                       "right_shift"
                     ]
                   }
+                ],
+                "conditions": [
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
+                  }
                 ]
               },
               {
@@ -67,6 +97,16 @@
                     "key_code": "non_us_backslash",
                     "modifiers": [
                       "right_shift"
+                    ]
+                  }
+                ],
+                "conditions": [
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
                     ]
                   }
                 ]
