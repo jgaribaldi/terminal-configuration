@@ -47,4 +47,5 @@ shell-integration = zsh
 font-family = "RobotoMono Nerd Font Mono"
 font-size = 16
 keybind = shift+enter=text:\n
+unfocused-split-opacity = 0.5
 
