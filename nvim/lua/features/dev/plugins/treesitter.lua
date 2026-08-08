@@ -1,10 +1,11 @@
-local data_root = vim.fn.stdpath('data')
+local data_root = vim.fn.stdpath 'data'
 local data_writable = vim.fn.isdirectory(data_root) == 1 and vim.loop.fs_access(data_root, 'W')
 
 return {
   'nvim-treesitter/nvim-treesitter',
+  branch = 'main',
   build = data_writable and ':TSUpdate' or nil,
-  main = 'nvim-treesitter.configs',
+  main = 'nvim-treesitter',
   opts = {
     ensure_installed = data_writable and {
       'bash',
@@ -21,14 +22,16 @@ return {
       'python',
       'go',
       'rust',
-      'rust',
     } or {},
     auto_install = data_writable,
-    highlight = {
-      enable = true,
-      additional_vim_regex_highlighting = { 'ruby' },
-    },
-    indent = { enable = true, disable = { 'ruby' } },
   },
+  init = function()
+    vim.api.nvim_create_autocmd('FileType', {
+      callback = function()
+        pcall(vim.treesitter.start)
+        vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+      end,
+    })
+  end,
   dependencies = {},
 }
