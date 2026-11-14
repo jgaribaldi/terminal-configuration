@@ -42,7 +42,7 @@
 # # Just for example:
 # resize-overlay-duration = 4s 200ms
 
-theme = "Elegant"
+theme = "Gruvbox Dark"
 shell-integration = zsh
 font-family = "RobotoMono Nerd Font Mono"
 font-size = 16
